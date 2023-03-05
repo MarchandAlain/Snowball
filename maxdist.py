@@ -21,12 +21,6 @@ Test_set = None
 if Test_set: Size_list, Repeat = [len(Test_set)], 1
 Print_points=False
 
-# Combinations
-C_3_2=[(0,1,2), (2,0,1), (1,2,0)]                                                         # first 2 out of 3
-C_3_2_plus=[(0,1,2,3), (2,0,1,3), (1,2,0,3)]                                         # first 2 out of 3 (ignore last)
-C_4_2=[(0,1,2,3), (0,2,1,3), (0,3,1,2), (1,2,0,3), (1,3,0,2), (2,3,0,1)]     # first 2 out of 4
-C_4_3=[(0,1,2,3), (3,0,1,2), (2,3,0,1), (1,2,3,0)]                                  # first 3 out of 4
-
 #====================================== create_set
 def create_set(size):
     """
@@ -168,7 +162,7 @@ def unit_tests():
     
 #====================================== main program
 """
-Draw sample of 2-D points and determine their minimal enclosing circle
+Draw sample of 2-D points and determine the most distant points
 evaluate performance for each sample
 """
 if Test: unit_tests()
@@ -180,12 +174,15 @@ if Step>1:
     print("Your Step:", Step, "\n")
 
 # compute increasing size list
-size, max_size, coef=Size_params
-Size_list=[]
-while size<=max_size:
-    Size_list+=[size]
-    size=int(size*coef)
-print(Shape, "\tdim", Dimension, "\nSet_size\tDist./N\tSteps\tTime(ms)\tt/pt(µs)")
+if not Test_set:
+    size, max_size, coef=Size_params
+    Size_list=[]
+    while size<=max_size:
+        Size_list+=[size]
+        size=int(size*coef)
+    print(Shape, "\tdim", Dimension, "\nSet_size\tDist./N\tSteps\tTime(ms)\tt/pt(µs)")
+else:
+    Size_list=[len(Test_set)]
 
 for index, Set_size in enumerate(Size_list):   
     for rep in range(Repeat):
