@@ -195,7 +195,7 @@ for index, Set_size in enumerate(Size_list):
         points=create_set(Set_size)
         if Test: points=Test
 
-        # compute minimum circle
+        # compute circle
         position=2
 
         diameter=points[:2]
@@ -209,15 +209,19 @@ for index, Set_size in enumerate(Size_list):
         
         while True:
             O,r_squared=circle(*diameter)    
-            
+
+            # try finding one outside point            
             C, position =point_outside(points, size, position, O, r_squared)
             if not C: break                                                 # AB is solution
+
+            # try finding another, more distant outside point           
             D, position =point_outside(points, size, position, C, 4*r_squared)
             if not D:
                 position=(position-1)%size
                 points, size = eliminate(points, position, size-1)  # eliminate C
                 if position==size: position=0
                 continue
+
             diameter=[C, D]
             steps+=1
 
