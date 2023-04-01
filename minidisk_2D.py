@@ -6,18 +6,19 @@ from itertools import combinations
 import time
 import tkinter
 
+square, disk, Gaussian, ellipse, annulus = "square", "disk", "Gaussian", "ellipse", "annulus"
 # Parameters
-Size_params= 100, 150_000, 1.05                                  # min, max, geometric progression
+Size_params= 2_000_000, 2_000_000, 1.05                                  # min, max, geometric progression
 Dimension=2
-Shape='square'                                                            # square   disk   Gaussian   ellipse   annulus
-Repeat=1                                                                     # create a new set each time 
+Shape=Gaussian                                                              # square   disk   Gaussian   ellipse   annulus
+Repeat=30                                                                     # create a new set each time 
 Near_zero=1.e-6                                                         # for determinant
 Approximate=1+1.e-12                                               # slightly more than 1
 Step=1                                                                         # only 1 or a prime number, e.g. 911 or a prime close to 5N/28
 Draw=False
 
 # Debugging options
-Verify=True
+Verify=False
 Tests=False                                                                  # if True, perform unit tests
 Test_set = None
 if Test_set: Size_list, Repeat = [len(Test_set)], 1
@@ -41,19 +42,19 @@ def create_set(size):
     Returns: points, a list of tuples of 2 float
     """
 # uniform square
-    if Shape=='square':
+    if Shape==square:
         x=list(np.random.random(size)*10) 
         y=list(np.random.random(size)*10)         
 
 # uniform disk
-    elif Shape=='disk':
+    elif Shape==disk:
         x=list(np.random.random(2*size)*10) 
         y=list(np.random.random(2*size)*10)                  # start with a square
         xy=[(a-5,b-5) for a,b in zip(x,y) if (a-5)**2+(b-5)**2<=25]
         x, y = list(zip(*xy[:size]))                                        
 
 # Gaussian disk
-    elif Shape=='Gaussian':
+    elif Shape==Gaussian:
         Mean, Sigma=0, 5
         angle=list(np.random.random(size)*2*math.pi)
         radius=list(np.random.normal(Mean, Sigma, size))
@@ -61,7 +62,7 @@ def create_set(size):
         y=[r*math.sin(a) for r, a in zip(radius, angle)]
 
 # Gaussian ellipse
-    elif Shape=='ellipse':
+    elif Shape==ellipse:
         Mean, Sigma, Elongation=0, 5, 3
         angle=list(np.random.random(size)*2*math.pi)
         radius=list(np.random.normal(Mean, Sigma, size))
@@ -69,7 +70,7 @@ def create_set(size):
         y=[r*math.sin(a) for r, a in zip(radius, angle)]
 
 # Gaussian annulus
-    elif Shape=='annulus':
+    elif Shape==annulus:
         Mean, Sigma=8, 1
         angle=list(np.random.random(size)*2*math.pi)
         radius=list(np.random.normal(Mean, Sigma, size))
